@@ -152,8 +152,61 @@ public class App implements Parcelable{
         return 0;
     }
 
+    public App(Parcel in){
+        name = in.readString();
+        urlImSmall = in.readString();
+        urlImMed = in.readString();
+        urlImLarge = in.readString();
+        summary = in.readString();
+        currency = in.readString();
+        type = in.readString();
+        rights = in.readString();
+        title = in.readString();
+        link = in.readString();
+        idLabel = in.readString();
+        idNumber = in.readString();
+        bundleId = in.readString();
+        artist = in.readString();
+        artistLink = in.readString();
+        category = in.readString();
+        categoryId = in.readString();
+        scheme = in.readString();
+        price = in.readDouble();
+        releaseDate = new Date(in.readLong());
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(name);
+        dest.writeString(urlImSmall);
+        dest.writeString(urlImMed);
+        dest.writeString(urlImLarge);
+        dest.writeString(summary);
+        dest.writeString(currency);
+        dest.writeString(type);
+        dest.writeString(rights);
+        dest.writeString(title);
+        dest.writeString(link);
+        dest.writeString(idLabel);
+        dest.writeString(idNumber);
+        dest.writeString(bundleId);
+        dest.writeString(artist);
+        dest.writeString(artistLink);
+        dest.writeString(category);
+        dest.writeString(categoryId);
+        dest.writeString(scheme);
+        dest.writeDouble(price);
+        dest.writeLong(releaseDate.getTime());
     }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        @Override
+        public App createFromParcel(Parcel in) {
+            return new App(in);
+        }
+        @Override
+        public App[] newArray(int size) {
+            return new App[size];
+        }
+    };
 }

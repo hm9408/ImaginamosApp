@@ -1,7 +1,6 @@
 package com.hugo.imaginamosapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
@@ -9,14 +8,11 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -42,108 +38,93 @@ import java.util.Date;
 import java.util.Locale;
 
 import Model.App;
-import it.gmariotti.cardslib.library.internal.Card;
-import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-import it.gmariotti.cardslib.library.view.CardListView;
 
 public class AppListActivity extends AppCompatActivity {
 
     private ArrayList<App> apps;
-    private ArrayList<Card> cards;
-    private CardArrayAdapter mCardArrayAdapter;
-    private CardListView mListView;
+    private int columns;
 
 
     private String root = Environment.getExternalStorageDirectory().toString();
 
-    private static String file_url = "https://itunes.apple.com/us/rss/topfreeapplications/limit=20/json";
-    private static String file_name = "/imaginamos/apps.json";
+    public static final String file_url = "https://itunes.apple.com/us/rss/topfreeapplications/limit=20/json";
+    public static final String file_name = "/imaginamos/apps.json";
     private boolean isTablet;
     private static String KEY_FIRST_RUN = "";
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private RecyclerViewAdapter rvadapter;
 
+    public static Context context;
+    private SwipeRefreshLayout swipeContainer;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
+        //CHECK WHETHER THE DEVICE IS A TABLET OR A PHONE
         isTablet = getResources().getBoolean(R.bool.isTablet);
         if (isTablet()) { //it's a tablet
             setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            columns = 2;
         } else { //it's a phone, not a tablet
             setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+            columns = 1;
         }
-        //if (shouldAskPPermisson()) {
-        //    String[] perms = {"android.permission.WRITE_EXTERNAL_STORAGE"};
-        //    requestPermissions(perms, 200);
-        //}
-        setContentView(R.layout.activity_app_list);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        setContentView(R.layout.activity_app_list);
+
+        //SwipeContainer SETUP
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                getApps();
+            }
+        });
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+
+        /*
         Window window = this.getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(R.color.colorPrimaryDark);
+        */
 
-        //ArrayList and Adapters initialization
+        //ArrayList and RecyclerView initialization
         apps = new ArrayList<App>();
-        cards = new ArrayList<Card>();
-        mListView = (CardListView) findViewById(R.id.carddemo_list_gplaycard);
-        mCardArrayAdapter = new CardArrayAdapter(AppListActivity.this.getApplicationContext(), cards);
 
+        RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
 
-        if(mListView != null){
-            mListView.setAdapter(mCardArrayAdapter);
-        }
+        rv.setHasFixedSize(true);
+        GridLayoutManager gridlm = new GridLayoutManager(getApplicationContext(),columns);
+        rv.setLayoutManager(gridlm);
+        rvadapter = new RecyclerViewAdapter(apps);
+        rv.setAdapter(rvadapter);
 
 
         //checks if it is app's first time use
         sharedPreferences = getPreferences(MODE_PRIVATE);
 
-        if(savedInstanceState == null){
-            Log.d("Debugtext","No es cambio de orientacion.");
-            if (!sharedPreferences.contains("KEY_FIRST_RUN")) {
-                KEY_FIRST_RUN = "something";
-                //getjson
-                Log.d("Debugtext","First time run.");
-                File myDir = new File(root + "/imaginamos");
-                myDir.mkdirs();
-            }
-            Toast.makeText(AppListActivity.this, "Actualizando lista...", Toast.LENGTH_SHORT).show();
-            /////////
-            //downloads json and parses it
-            getApps();
-
-
-            editor = sharedPreferences.edit();
-            editor.putString("KEY_FIRST_RUN", KEY_FIRST_RUN);
-            editor.commit();
+        if (!sharedPreferences.contains("KEY_FIRST_RUN")) {
+            KEY_FIRST_RUN = "something";
+            //Makes necessary directories
+            Log.d("Debugtext","First time run.");
+            File myDir = new File(root + "/imaginamos");
+            myDir.mkdirs();
         }
+        //Updates the app list
+        getApps();
+        editor = sharedPreferences.edit();
+        editor.putString("KEY_FIRST_RUN", KEY_FIRST_RUN);
+        editor.commit();
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_app_list, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void getApps(){
@@ -175,7 +156,6 @@ public class AppListActivity extends AppCompatActivity {
                 Toast.makeText(AppListActivity.this, "No hay conectividad a internet\nNo se puede descargar el archivo por primera vez", Toast.LENGTH_SHORT).show();
             }
         }
-        mCardArrayAdapter.notifyDataSetChanged();
 
     }
 
@@ -191,7 +171,7 @@ public class AppListActivity extends AppCompatActivity {
     }
 
     public void parseJson(String content){
-
+        rvadapter.clear();
         JSONObject j;
         try{
             Log.d("Debugtext","Parsing JSON.");
@@ -199,7 +179,7 @@ public class AppListActivity extends AppCompatActivity {
 
             //parse json
             JSONArray entries = j.getJSONObject("feed").getJSONArray("entry");
-            Log.d("Debugtext","entries number= "+entries.length());
+            //Log.d("Debugtext","entries number= "+entries.length());
             for(int i=0;i<entries.length();i++){
                 //the Entry
                 JSONObject entry = entries.getJSONObject(i);
@@ -258,23 +238,11 @@ public class AppListActivity extends AppCompatActivity {
                 final App newApp = new App(name,urlImSmall,urlImMed,urlImLarge,summary,price,currency,type,rights,title,link,idLabel,idNumber,bundleId,artist,artistLink,
                         category,categoryId,scheme,releaseDate);
                 apps.add(newApp);
-
-
-                CustomCard c = new CustomCard(getApplicationContext(), newApp);
-                c.setOnClickListener(new Card.OnCardClickListener() {
-                    @Override
-                    public void onClick(Card card, View view) {
-                        Intent i = new Intent(AppListActivity.this, AppDetailActivity.class);
-                        //send selected application on intent
-                        i.putExtra("myapp",newApp);
-                    }
-                });
-                cards.add(c);
-                //System.out.println("se agrego una card con la app "+c.getApp().getName());
-
-
             }
-            Log.d("Debugtext","se notifico al adapter, numelementos= "+mCardArrayAdapter.getCount());
+            rvadapter.notifyDataSetChanged();
+            swipeContainer.setRefreshing(false);
+            //Toast.makeText(context,"Lista actualizada.",Toast.LENGTH_SHORT).show();
+            //Log.d("Debugtext","se notifico al adapter, numelementos= "+rvadapter.getItemCount());
         }
         catch(Exception e){
             Log.e("Error: ", e.getMessage(), e);
@@ -304,9 +272,6 @@ public class AppListActivity extends AppCompatActivity {
                 is.close();
                 content = sb.toString();
 
-                //System.out.println("CONTENT= \n"+content);
-                parseJson(content);
-
                 //System.out.println(apps.size());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -332,7 +297,7 @@ public class AppListActivity extends AppCompatActivity {
         //private ArrayList<App> apps = new ArrayList<App>();
 
 
-        private final String file_url = "https://itunes.apple.com/us/rss/topfreeapplications/limit=20/json";
+        //private final String file_url = "https://itunes.apple.com/us/rss/topfreeapplications/limit=20/json";
         @Override
         protected String doInBackground(String... f_url) {
             int count;
@@ -344,12 +309,12 @@ public class AppListActivity extends AppCompatActivity {
                 // getting file length
 
                 // input stream to read file - with 8k buffer
-                InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                InputStream input = new BufferedInputStream(url.openStream(), 1024);
 
                 // Output stream to write file
                 File f = new File(root + file_name);
                 OutputStream output = new FileOutputStream(f);
-                byte data[] = new byte[10000];
+                byte data[] = new byte[1024];
                 while ((count = input.read(data)) != -1) {
                     // writing data to file
                     output.write(data, 0, count);
