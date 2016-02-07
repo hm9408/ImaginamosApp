@@ -15,6 +15,7 @@ Sus funciones deben ser:
 * La vista del menú es requerida en grillas (Tablet), listas (Smartphone)
 * Debe tener animaciones entre las vistas
 * IDE: Android Studio
+* Compatibilidad con Android 4+ (API Level 14+)
 
 ## Comentarios
 * Se utilizaron las librerías oficiales de Google CardView y RecyclerView
