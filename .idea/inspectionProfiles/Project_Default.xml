@@ -134,6 +134,7 @@
     <inspection_tool class="AndroidLintUnusedAttribute" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUnusedQuantity" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="AndroidLintUseAlpha2" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="AndroidLintUselessParent" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="AndroidLintUsesMinSdkAttributes" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="AndroidLintValidFragment" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
     <inspection_tool class="AndroidLintValidRestrictions" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
