@@ -52,5 +52,6 @@ Sus funciones deben ser:
 ![alt text](http://i.imgur.com/J3amfeg.png "Nexus 7 2012 test, no file found (offline mode)")
 
 ##TODO
-* Agregar animaciones de transición entre AppListActivity y AppDetailActivity. Posible complicación: el OnClickListener se encuentra en el RecyclerViewAdapter y no tiene los métodos de la actividad necesarios para crear las animaciones.
+* Agregar Splash Screen.
+* Agregar animaciones de transición entre las vistas. Posible complicación: el OnClickListener se encuentra en el RecyclerViewAdapter y no tiene los métodos de la actividad necesarios para crear las animaciones.
 * Agregar animación al cargar el RecyclerView.
