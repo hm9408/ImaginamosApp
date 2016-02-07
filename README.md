@@ -36,6 +36,8 @@ Sus funciones deben ser:
   4. android.permission.READ_EXTERNAL_STORAGE, para cargar el archivo descargado.
 
 ## Vistas
+### SplashActivity
+![alt text](http://i.imgur.com/FqpN2gZ.png "SplashActivity")
 ### OnePlus One test, AppListActivity (Orientation: landscape)
 ![alt text](http://i.imgur.com/ffQDfCP.png "OnePlus One test, AppListActivity (Orientation: landscape)")
 ### OnePlus One test, AppDetailActivity (Orientation: landscape)
