@@ -246,6 +246,7 @@ public class AppListActivity extends AppCompatActivity {
         }
         catch(Exception e){
             Log.e("Error: ", e.getMessage(), e);
+            Toast.makeText(context,"Problema al leer el archivo descargado.",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -275,8 +276,10 @@ public class AppListActivity extends AppCompatActivity {
                 //System.out.println(apps.size());
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+                Toast.makeText(context,"Problema al leer el archivo descargado.",Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
+                Toast.makeText(context,"Problema al leer el archivo descargado.",Toast.LENGTH_SHORT).show();
             }
         }
         return content;
@@ -331,6 +334,7 @@ public class AppListActivity extends AppCompatActivity {
 
             } catch (Exception e) {
                 Log.e("Error: ", e.getMessage(), e);
+                Toast.makeText(context,"Problema al descargar la lista.",Toast.LENGTH_SHORT).show();
             }
 
             return null;
