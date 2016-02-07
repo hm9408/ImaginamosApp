@@ -6,7 +6,7 @@ Sus funciones deben ser:
 2. Crear una vista principal con dicha lista, mostrando cada aplicación como un elemento.
 3. Crear una vista en la que se muestre el detalle de la aplicación seleccionada.
 
-## Restricciones:
+## Restricciones
 * Utilizar estrictamente solo las imágenes relativas que vienen en el JSON
 * La aplicación debe funcionar offline y online.
 * Aplicación universal (Smartphone y Tablet)
@@ -27,6 +27,7 @@ Sus funciones deben ser:
       2. Y no existe el archivo, no carga la lista.
 * Para mejorar el desempeño al pasar Extras en los Intents, la clase App (Modelo de la aplicación cargada) implementa la interfaz Parcelable.
 * La aplicación fue probada en un OnePlus One ('bacon', Android 6.0.1, Unofficial CyanogenMod) y en una Nexus 7 2012 ('grouper', Android 5.1.1, Stock).
+* El logo fue tomado de la página de LinkedIn de Imaginamos.
 
 ## Vistas
 ### OnePlus One test, AppListActivity (Orientation: landscape)
