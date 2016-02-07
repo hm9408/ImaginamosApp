@@ -7,22 +7,23 @@ Sus funciones deben ser:
 3. Crear una vista en la que se muestre el detalle de la aplicación seleccionada.
 
 ## Restricciones
-* Utilizar estrictamente solo las imágenes relativas que vienen en el JSON
+* Utilizar estrictamente solo las imágenes relativas que vienen en el JSON.
 * La aplicación debe funcionar offline y online.
-* Aplicación universal (Smartphone y Tablet)
-* Smartphone: orientación landscape
-* Tablet: orientación portrait
-* La vista del menú es requerida en grillas (Tablet), listas (Smartphone)
-* Debe tener animaciones entre las vistas
-* IDE: Android Studio
-* Compatibilidad con Android 4+ (API Level 14+)
+* Aplicación universal (Smartphone y Tablet).
+* Smartphone: orientación landscape.
+* Tablet: orientación portrait.
+* La vista del menú es requerida en grillas (Tablet), listas (Smartphone).
+* Debe tener animaciones entre las vistas.
+* IDE: Android Studio.
+* Compatibilidad con Android 4+ (API Level 14+).
 
 ## Comentarios
-* Se utilizaron las librerías oficiales de Google CardView y RecyclerView
+* Se fijó el targetSdkVersion en 22 (5.1.1) para evitar problemas con el manejo de permisos de Marshmallow.
+* Se utilizaron las librerías oficiales de Google CardView y RecyclerView.
 * Se utilizó la librería Picasso para cargar los íconos de cada aplicación de manera asíncrona.
 * Se utilizó un SwipeRefreshLayout en la AppListActivity, para poder actualizar la lista fácilmente.
 * El método que actualiza la lista de aplicaciones sigue los siguientes pasos:
-  1. Revisa si hay conexión a Internet. Si hay conexión a Internet, intenta descargar el archivo y actualizar la lista. Si no hay conexión a internet:
+  1. Revisa si hay conexión a Internet. Si hay conexión a Internet, intenta descargar el archivo y actualizar la lista. Si no hay conexión a internet
       1. Y existe el archivo, porque fue descargado anteriormente, carga la lista de manera offline.
       2. Y no existe el archivo, no carga la lista.
 * Para mejorar el desempeño al pasar Extras en los Intents, la clase App (Modelo de la aplicación cargada) implementa la interfaz Parcelable.
