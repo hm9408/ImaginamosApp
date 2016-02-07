@@ -28,6 +28,11 @@ Sus funciones deben ser:
 * Para mejorar el desempeño al pasar Extras en los Intents, la clase App (Modelo de la aplicación cargada) implementa la interfaz Parcelable.
 * La aplicación fue probada en un OnePlus One ('bacon', Android 6.0.1, Unofficial CyanogenMod) y en una Nexus 7 2012 ('grouper', Android 5.1.1, Stock).
 * El logo fue tomado de la página de LinkedIn de Imaginamos, y el ic_launcher.png fue generado en https://romannurik.github.io/AndroidAssetStudio/icons-launcher.html.
+* Se utilizaron los permisos:
+  1. android.permission.ACCESS_NETWORK_STATE, para verificar la conectividad del dispositivo.
+  2. android.permission.INTERNET, para descargar el archivo JSON.
+  3. android.permission.WRITE_EXTERNAL_STORAGE, para escribir el archivo en la memoria externa del dispositivo (/sdcard/imaginamos/).
+  4. android.permission.READ_EXTERNAL_STORAGE, para cargar el archivo descargado.
 
 ## Vistas
 ### OnePlus One test, AppListActivity (Orientation: landscape)
