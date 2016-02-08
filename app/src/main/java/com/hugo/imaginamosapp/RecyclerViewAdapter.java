@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,21 +16,20 @@ import java.util.ArrayList;
 
 import Model.App;
 
-/**
- * Created by hm94__000 on 06-Feb-16.
- */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.AppVH>{
 
 
     ArrayList<App> apps;
 
     @Override
+    //Creates a ViewHolder for each Card
     public AppVH onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item, parent, false);
         return new AppVH(v);
     }
 
     @Override
+    //Loads the attributes from the App Object into the ViewHolder
     public void onBindViewHolder(AppVH holder, int position) {
         holder.name.setText(apps.get(position).getName());
         holder.artist.setText(apps.get(position).getArtist());
@@ -43,14 +41,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     @Override
+    //Returns the size of the App array instead of the default 0
     public int getItemCount() {
         return apps.size();
     }
+
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 
+    //Returns the App array
     RecyclerViewAdapter(ArrayList<App> applications){
         this.apps = applications;
     }
@@ -61,12 +62,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         notifyDataSetChanged();
     }
 
-    // Add a list of items
-    public void addAll(ArrayList<App> list) {
-        apps.addAll(list);
-        notifyDataSetChanged();
-    }
-
+    //Inner Class representing each Card (ViewHolder)
     public class AppVH extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         CardView cv;
@@ -78,6 +74,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public AppVH(View itemView) {
             super(itemView);
+            //Initializes the Views
             cv = (CardView) itemView.findViewById(R.id.cardview);
             name = (TextView) itemView.findViewById(R.id.app_name);
             artist = (TextView) itemView.findViewById(R.id.app_artist);
@@ -90,7 +87,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
         public void onClick(View v) {
             final Intent intent;
-            Log.d("Debugtext","Card with position " + getAdapterPosition() + " was touched.");
+            //Opens the AppDetailActivity showing the selected App Card
+            //Log.d("Debugtext","Card with position " + getAdapterPosition() + " was touched.");
             intent = new Intent(c, AppDetailActivity.class);
             intent.putExtra("app",apps.get(getAdapterPosition()));
             c.startActivity(intent);

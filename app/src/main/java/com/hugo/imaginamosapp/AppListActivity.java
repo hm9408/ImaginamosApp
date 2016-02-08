@@ -63,6 +63,7 @@ public class AppListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
+
         //CHECK WHETHER THE DEVICE IS A TABLET OR A PHONE
         isTablet = getResources().getBoolean(R.bool.isTablet);
         if (isTablet()) { //it's a tablet
@@ -89,14 +90,6 @@ public class AppListActivity extends AppCompatActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-
-        /*
-        Window window = this.getWindow();
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(R.color.colorPrimaryDark);
-        */
-
         //ArrayList and RecyclerView initialization
         apps = new ArrayList<App>();
 
@@ -109,13 +102,15 @@ public class AppListActivity extends AppCompatActivity {
         rv.setAdapter(rvadapter);
 
 
-        //checks if it is app's first time use
+        //Checks if it is app's first time use
         sharedPreferences = getPreferences(MODE_PRIVATE);
 
         if (!sharedPreferences.contains("KEY_FIRST_RUN")) {
-            KEY_FIRST_RUN = "something";
+            KEY_FIRST_RUN = "first";
             //Makes necessary directories
             Log.d("Debugtext","First time run.");
+
+            //Creates the necessary folder for the app
             File myDir = new File(root + "/imaginamos");
             myDir.mkdirs();
         }
@@ -128,37 +123,36 @@ public class AppListActivity extends AppCompatActivity {
     }
 
     public void getApps(){
-        //Initially, there must be a JSON on the device's external data (?)
-        Log.d("Debugtext","Actualizando lista...");
+        //Initially, there must be a JSON on the device's external data
+        //Log.d("Debugtext","Actualizando lista...");
         Toast.makeText(AppListActivity.this, "Actualizando lista...", Toast.LENGTH_LONG).show();
         String toastText = "";
-
-        //Check if there is network access
-
         if(checkNetwork())
         {
             //Download JSON
-            Log.d("Debugtext","Hay internet.");
+            //Log.d("Debugtext","Hay internet.");
             new GetJSONAsync().execute();
         }
         else {
-            Log.d("Debugtext","No hay internet.");
+            //Log.d("Debugtext","No hay internet.");
             toastText = "No hay conexión.";
             File f = new File(root+file_name);
             if(f.exists()){
-                Log.d("Debug","Existe el archivo.");
+                //Log.d("Debug","Existe el archivo.");
                 parseJson(readFileApps());
-                toastText = "Se cargó la lista del archivo offline.";
+                toastText += "\nSe cargó la lista del archivo offline.";
                 Toast.makeText(AppListActivity.this, toastText, Toast.LENGTH_SHORT).show();
             }
             else{
-                Log.d("Debugtext","No hay internet, no hay archivo.");
-                Toast.makeText(AppListActivity.this, "No hay conectividad a internet\nNo se puede descargar el archivo por primera vez", Toast.LENGTH_SHORT).show();
+                //Log.d("Debugtext","No hay internet, no hay archivo.");
+                toastText += "\nNo se puede descargar el archivo por primera vez";
+                Toast.makeText(AppListActivity.this, toastText, Toast.LENGTH_SHORT).show();
             }
         }
 
     }
 
+    //Checks whether the device has network connection
     public boolean checkNetwork()
     {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -166,15 +160,17 @@ public class AppListActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    //Gets the boolean resource from the values folder
     public boolean isTablet() {
         return isTablet;
     }
 
+    //Parses a JSONObject created from a given String
     public void parseJson(String content){
         rvadapter.clear();
         JSONObject j;
         try{
-            Log.d("Debugtext","Parsing JSON.");
+            //Log.d("Debugtext","Parsing JSON.");
             j = new JSONObject(content);
 
             //parse json
@@ -184,48 +180,59 @@ public class AppListActivity extends AppCompatActivity {
                 //the Entry
                 JSONObject entry = entries.getJSONObject(i);
                 ////////////////////////////////////////////////////
-
+                //App name
                 JSONObject imName = entry.getJSONObject("im:name");
                 String name = imName.getString("label"); //im:name/label
                 //////////////////////////
+                //App image URLs
                 JSONArray images = entry.getJSONArray("im:image");
                 String urlImSmall = images.getJSONObject(0).getString("label"); //im:image/label[0]
                 String urlImMed = images.getJSONObject(1).getString("label"); //im:image/label[1]
                 String urlImLarge = images.getJSONObject(2).getString("label"); //im:image/label[2]
                 //////////////////////////
+                //App summary
                 JSONObject sum = entry.getJSONObject("summary");
                 String summary = sum.getString("label"); //summary/label
                 //////////////////////////
+                //App price and currency
                 JSONObject imPrice = entry.getJSONObject("im:price").getJSONObject("attributes");
                 double price = imPrice.getDouble("amount"); //im:price/attributes/amount
                 String currency = imPrice.getString("currency"); //im:price/attributes/currency
                 //////////////////////////
+                //App contentType
                 JSONObject imContentType = entry.getJSONObject("im:contentType");
                 String type = imContentType.getJSONObject("attributes").getString("label"); //im:contentType/attributes/label
                 //////////////////////////
+                //App rights
                 JSONObject right = entry.getJSONObject("rights");
                 String rights = right.getString("label"); //rights/label
                 //////////////////////////
+                //App title
                 JSONObject titl = entry.getJSONObject("title");
                 String title = titl.getString("label"); //title/label
                 //////////////////////////
+                //App link
                 JSONObject lin = entry.getJSONObject("link").getJSONObject("attributes");
                 String link = lin.getString("href"); //link/attributes/href
                 //////////////////////////
+                //App ID and attributes
                 JSONObject id = entry.getJSONObject("id");
                 String idLabel = id.getString("label"); //id/label
                 String idNumber = id.getJSONObject("attributes").getString("im:id"); //id/attributes/im:id
                 String bundleId = id.getJSONObject("attributes").getString("im:bundleId"); //id/attributes/im:bundleId
                 //////////////////////////
+                //App artist and artist link
                 JSONObject art = entry.getJSONObject("im:artist");
                 String artist = art.getString("label"); //im:artist/label
                 String artistLink= art.getJSONObject("attributes").getString("href"); //im:artist/attributes/href
                 //////////////////////////
+                //App category
                 JSONObject categ = entry.getJSONObject("category").getJSONObject("attributes");
                 String category = categ.getString("label"); //category/attributes/label
                 String categoryId = categ.getString("im:id"); //category/attributes/im:id
                 String scheme = categ.getString("scheme"); //category/attributes/scheme
                 //////////////////////////
+                //App release date
                 JSONObject imdate = entry.getJSONObject("im:releaseDate").getJSONObject("attributes");
                 String dateString  = imdate.getString("label");
                 DateFormat df = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
@@ -239,18 +246,23 @@ public class AppListActivity extends AppCompatActivity {
                         category,categoryId,scheme,releaseDate);
                 apps.add(newApp);
             }
+
+            //Updates the adapter
             rvadapter.notifyDataSetChanged();
+            //Stops the refreshing
             swipeContainer.setRefreshing(false);
             //Toast.makeText(context,"Lista actualizada.",Toast.LENGTH_SHORT).show();
             //Log.d("Debugtext","se notifico al adapter, numelementos= "+rvadapter.getItemCount());
         }
         catch(Exception e){
-            Log.e("Error: ", e.getMessage(), e);
+            Log.e("ImaginamosApp Error:", e.getMessage(), e);
             Toast.makeText(context,"Problema al leer el archivo descargado.",Toast.LENGTH_SHORT).show();
         }
     }
 
     public String readFileApps(){
+
+        //Read a file and write it onto a String, to later build a JSONObject
         String content="";
 
         File f = new File(root+file_name);
@@ -272,13 +284,11 @@ public class AppListActivity extends AppCompatActivity {
                 br.close();
                 is.close();
                 content = sb.toString();
-
-                //System.out.println(apps.size());
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                Log.e("ImaginamosApp Error:", e.getMessage(), e);
                 Toast.makeText(context,"Problema al leer el archivo descargado.",Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e("ImaginamosApp Error:", e.getMessage(), e);
                 Toast.makeText(context,"Problema al leer el archivo descargado.",Toast.LENGTH_SHORT).show();
             }
         }
@@ -292,15 +302,8 @@ public class AppListActivity extends AppCompatActivity {
     public class GetJSONAsync extends AsyncTask<String, String, String> {
 
         /**
-         * Downloading file in background thread
+         * Downloading JSON file in background thread
          */
-        //private String result = "";
-        private String root = Environment.getExternalStorageDirectory().toString();
-
-        //private ArrayList<App> apps = new ArrayList<App>();
-
-
-        //private final String file_url = "https://itunes.apple.com/us/rss/topfreeapplications/limit=20/json";
         @Override
         protected String doInBackground(String... f_url) {
             int count;
@@ -309,9 +312,8 @@ public class AppListActivity extends AppCompatActivity {
                 URL url = new URL(file_url);
                 URLConnection conection = url.openConnection();
                 conection.connect();
-                // getting file length
 
-                // input stream to read file - with 8k buffer
+                //InputStream to read file
                 InputStream input = new BufferedInputStream(url.openStream(), 1024);
 
                 // Output stream to write file
@@ -333,7 +335,7 @@ public class AppListActivity extends AppCompatActivity {
 
 
             } catch (Exception e) {
-                Log.e("Error: ", e.getMessage(), e);
+                Log.e("ImaginamosApp Error:", e.getMessage(), e);
                 Toast.makeText(context,"Problema al descargar la lista.",Toast.LENGTH_SHORT).show();
             }
 

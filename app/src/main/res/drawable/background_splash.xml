@@ -4,6 +4,7 @@
     <item
         android:drawable="@color/background"/>
 
+    <!--Bitmap for the SplashActivity icon-->
     <item>
         <bitmap
             android:gravity="center"

@@ -5,13 +5,10 @@ import android.os.Parcelable;
 
 import java.util.Date;
 
-/**
- * Created by hm94__000 on 04-Feb-16.
- */
 public class App implements Parcelable{
 
-    //Each app is one 'entry' within the JSON
-
+    //Each App is one 'entry' within the JSON
+    //Parcelable is needed in order to speed up the Intent Extra extraction process when passing an App Object between Activities
     private String name; //im:name/label
 
     private String urlImSmall; //im:image/label[0]

@@ -37,43 +37,56 @@ public class AppDetailActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
 
+        //Inflates the view from the layout file
         setContentView(R.layout.activity_app_detail);
-        Intent i = getIntent();
-        app= i.getParcelableExtra("app");
         setTitle("App Details");
+        Intent i = getIntent();
+        //Loads the Intent Extra, which is the selected App object
+        app= i.getParcelableExtra("app");
+
+        //Gets the views from their IDs and sets their items with the App attributes
+        //App icon
         ImageView icon = (ImageView) findViewById(R.id.app_detail_icon);
         Picasso.with(context).load(app.getUrlImLarge()).into(icon);
 
+        //App name
         TextView name = (TextView) findViewById(R.id.app_detail_name);
         name.setText(app.getName());
 
+        //App artist
         TextView artist = (TextView) findViewById(R.id.app_detail_artist);
         artist.setText(app.getArtist());
 
+        //App price. If the price is 0.0, then the text will be 'Free'
         TextView price = (TextView) findViewById(R.id.app_detail_price);
         String p = "";
         if(app.getPrice()==0.0) p="Free";
         else p= "$"+app.getPrice()+" "+app.getCurrency();
         price.setText(p);
 
+        //App rights
         TextView rights = (TextView) findViewById(R.id.app_detail_rights);
         rights.setText(app.getRights());
 
+        //App contentType
         TextView type = (TextView) findViewById(R.id.app_detail_type);
         String t = app.getType()+" ("+app.getCategory()+")";
         type.setText(t);
 
+        //App release date
         TextView releaseDate = (TextView) findViewById(R.id.app_detail_releasedate);
         DateFormat df = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
         String rd = "Released on "+df.format(app.getReleaseDate());
         releaseDate.setText(rd);
 
+        //App summary
         TextView summary = (TextView) findViewById(R.id.app_detail_summary);
         summary.setText(app.getSummary());
 
     }
 
 
+    //Gets the boolean resource from the values folder
     public boolean isTablet() {
         return isTablet;
     }

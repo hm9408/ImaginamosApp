@@ -4,9 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-/**
- * Created by hm94__000 on 07-Feb-16.
- */
 public class SplashActivity extends AppCompatActivity{
 
     @Override
@@ -14,10 +11,12 @@ public class SplashActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         Intent intent = new Intent(SplashActivity.this, AppListActivity.class);
         try {
-            Thread.sleep(1000);
+            //Deliberately waits  ms in order to show the icon more
+            Thread.sleep(800);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        //starts the AppListActivity
         startActivity(intent);
         finish();
     }

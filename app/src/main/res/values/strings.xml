@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Imaginamos App</string>
     <string name="action_settings">Settings</string>
-    <string name="transition_name_circle">transition:CIRCLE</string>
 </resources>
