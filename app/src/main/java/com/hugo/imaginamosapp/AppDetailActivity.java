@@ -36,8 +36,9 @@ public class AppDetailActivity extends AppCompatActivity {
         } else { //it's a phone, not a tablet
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
-
         //Inflates the view from the layout file
+
+
         setContentView(R.layout.activity_app_detail);
         setTitle("App Details");
         Intent i = getIntent();
@@ -85,6 +86,12 @@ public class AppDetailActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void onBackPressed(){
+        //The slide in animation
+        supportFinishAfterTransition();
+    }
 
     //Gets the boolean resource from the values folder
     public boolean isTablet() {

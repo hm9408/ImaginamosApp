@@ -1,7 +1,9 @@
 package com.hugo.imaginamosapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -91,7 +93,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             //Log.d("Debugtext","Card with position " + getAdapterPosition() + " was touched.");
             intent = new Intent(c, AppDetailActivity.class);
             intent.putExtra("app",apps.get(getAdapterPosition()));
-            c.startActivity(intent);
+
+            //Adds the animation to the activity Bundle.
+            //The context is casted in order to enable the animation
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation((Activity)c, (View)cv, "appcard");
+            c.startActivity(intent, options.toBundle());
         }
     }
 

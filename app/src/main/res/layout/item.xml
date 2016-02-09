@@ -12,6 +12,7 @@
         app:cardUseCompatPadding="true"
         app:cardPreventCornerOverlap="false"
         card_view:cardBackgroundColor="@color/card_background"
+        android:transitionName="appcard"
         >
 
         <RelativeLayout
