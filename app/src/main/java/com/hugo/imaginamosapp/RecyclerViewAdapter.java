@@ -22,6 +22,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     ArrayList<App> apps;
+    Context context;
 
     @Override
     //Creates a ViewHolder for each Card
@@ -54,8 +55,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     //Returns the App array
-    RecyclerViewAdapter(ArrayList<App> applications){
+    RecyclerViewAdapter(ArrayList<App> applications, Context context){
+
         this.apps = applications;
+        this.context = context;
     }
 
     // Clean all elements of the recycler
@@ -72,7 +75,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView artist;
         TextView price;
         ImageView icon;
-        private final Context c;
 
         public AppVH(View itemView) {
             super(itemView);
@@ -83,7 +85,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             price = (TextView) itemView.findViewById(R.id.app_price);
             icon = (ImageView) itemView.findViewById(R.id.app_icon);
             itemView.setOnClickListener(this);
-            c = itemView.getContext();
         }
 
         @Override
@@ -91,14 +92,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             final Intent intent;
             //Opens the AppDetailActivity showing the selected App Card
             //Log.d("Debugtext","Card with position " + getAdapterPosition() + " was touched.");
-            intent = new Intent(c, AppDetailActivity.class);
+            intent = new Intent(context, AppDetailActivity.class);
             intent.putExtra("app",apps.get(getAdapterPosition()));
 
             //Adds the animation to the activity Bundle.
             //The context is casted in order to enable the animation
-            ActivityOptionsCompat options = ActivityOptionsCompat.
-                    makeSceneTransitionAnimation((Activity)c, (View)cv, "appcard");
-            c.startActivity(intent, options.toBundle());
+            ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)context, v, "appcard");
+            ((Activity)context).startActivity(intent, options.toBundle());
         }
     }
 

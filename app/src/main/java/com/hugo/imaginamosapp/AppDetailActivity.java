@@ -17,9 +17,7 @@ import java.util.Locale;
 
 import Model.App;
 
-/**
- * Created by hm94__000 on 04-Feb-16.
- */
+
 public class AppDetailActivity extends AppCompatActivity {
 
     private boolean isTablet;
@@ -29,6 +27,7 @@ public class AppDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getApplicationContext();
+
         //CHECK WHETHER THE DEVICE IS A TABLET OR A PHONE
         isTablet = getResources().getBoolean(R.bool.isTablet);
         if (isTablet()) { //it's a tablet
@@ -37,7 +36,6 @@ public class AppDetailActivity extends AppCompatActivity {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
         //Inflates the view from the layout file
-
 
         setContentView(R.layout.activity_app_detail);
         setTitle("App Details");
@@ -89,7 +87,6 @@ public class AppDetailActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        //The slide in animation
         supportFinishAfterTransition();
     }
 

@@ -34,6 +34,7 @@ Sus funciones deben ser:
   2. android.permission.INTERNET, para descargar el archivo JSON.
   3. android.permission.WRITE_EXTERNAL_STORAGE, para escribir el archivo en la memoria externa del dispositivo (/sdcard/imaginamos/).
   4. android.permission.READ_EXTERNAL_STORAGE, para cargar el archivo descargado.
+* Se agregó una animación al regresar del AppDetailActivity al AppListActivity, utilizando SharedElements. Esto limita la compatibilidad de la animación a API 21+. En versiones menores no se muestra la animación.
 
 ## Vistas
 ### SplashActivity
@@ -52,6 +53,9 @@ Sus funciones deben ser:
 ![alt text](http://i.imgur.com/kR29MqU.png "Nexus 7 2012 test, updating list (offline mode)")
 ### Nexus 7 2012 test, no file found (offline mode)
 ![alt text](http://i.imgur.com/J3amfeg.png "Nexus 7 2012 test, no file found (offline mode)")
+
+## Video
+[YouTube](https://www.youtube.com/watch?v=wx1ghobrUNs)
 
 ##TODO
 * Agregar animaciones de transición entre las vistas. Posible complicación: el OnClickListener se encuentra en el RecyclerViewAdapter y no tiene los métodos de la actividad necesarios para crear las animaciones.

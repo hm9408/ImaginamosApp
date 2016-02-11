@@ -62,7 +62,7 @@ public class AppListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = getApplicationContext();
+        context = this;
 
         //CHECK WHETHER THE DEVICE IS A TABLET OR A PHONE
         isTablet = getResources().getBoolean(R.bool.isTablet);
@@ -94,11 +94,12 @@ public class AppListActivity extends AppCompatActivity {
         apps = new ArrayList<App>();
 
         RecyclerView rv = (RecyclerView) findViewById(R.id.recycler_view);
-
+        RecyclerView.ItemAnimator anim = rv.getItemAnimator();
+        anim.setChangeDuration(300);
         rv.setHasFixedSize(true);
         GridLayoutManager gridlm = new GridLayoutManager(getApplicationContext(),columns);
         rv.setLayoutManager(gridlm);
-        rvadapter = new RecyclerViewAdapter(apps);
+        rvadapter = new RecyclerViewAdapter(apps, context);
         rv.setAdapter(rvadapter);
 
 
@@ -296,9 +297,7 @@ public class AppListActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Created by hm94__000 on 04-Feb-16.
-     */
+
     public class GetJSONAsync extends AsyncTask<String, String, String> {
 
         /**
@@ -308,7 +307,7 @@ public class AppListActivity extends AppCompatActivity {
         protected String doInBackground(String... f_url) {
             int count;
             try {
-                Log.d("Debugtext","Downloading");
+                //Log.d("Debugtext","Downloading");
                 URL url = new URL(file_url);
                 URLConnection conection = url.openConnection();
                 conection.connect();
