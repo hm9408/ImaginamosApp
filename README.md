@@ -55,7 +55,7 @@ Sus funciones deben ser:
 ![alt text](http://i.imgur.com/J3amfeg.png "Nexus 7 2012 test, no file found (offline mode)")
 
 ## Video
-[YouTube](https://www.youtube.com/watch?v=wx1ghobrUNs)
+[OnePlus One, CM13 test](https://www.youtube.com/watch?v=wx1ghobrUNs)
 
 ##TODO
 * Agregar animaciones de transición entre las vistas. Posible complicación: el OnClickListener se encuentra en el RecyclerViewAdapter y no tiene los métodos de la actividad necesarios para crear las animaciones.
